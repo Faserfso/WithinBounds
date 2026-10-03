@@ -104,6 +104,8 @@ def main():
   <a href="index.html" class="home">{html.escape(title)}</a>
   <div class="tools">
     <button id="listen" type="button" hidden>Слушать</button>
+    <select id="voice" aria-label="Голос" hidden></select>
+    <select id="rate" aria-label="Скорость" hidden><option value="0.85">0.85x</option><option value="1" selected>1x</option><option value="1.15">1.15x</option><option value="1.3">1.3x</option></select>
     <button id="font-" type="button" aria-label="Мельче">A-</button>
     <button id="font+" type="button" aria-label="Крупнее">A+</button>
     <button id="theme" type="button" aria-label="Тема">Тема</button>

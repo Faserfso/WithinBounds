@@ -46,11 +46,38 @@
   var btn = document.getElementById('listen');
   if (!('speechSynthesis' in window)) return;
   var synth = speechSynthesis, paras = Array.prototype.slice.call(art.querySelectorAll('h1, p:not(.num)'));
-  var idx = 0, playing = false;
-  function voice() {
-    var vs = synth.getVoices().filter(function (v) { return /^ru/i.test(v.lang); });
-    return vs.find(function (v) { return /natural|google|milena|yuri|dmitry|svetlana/i.test(v.name); }) || vs[0];
+  var idx = 0, playing = false, cur = null;
+  var sel = document.getElementById('voice'), rate = document.getElementById('rate');
+  function score(v) {
+    var n = v.name;
+    if (/natural|online|neural/i.test(n)) return 4;          // нейросетевые голоса Edge и Windows
+    if (/premium|enhanced|улучш|siri/i.test(n)) return 3;      // улучшенные голоса Apple
+    if (/google/i.test(n)) return 2;
+    return v.localService ? 0 : 1;
   }
+  function voices() {
+    return synth.getVoices().filter(function (v) { return /^ru/i.test(v.lang); })
+      .sort(function (a, b) { return score(b) - score(a); });
+  }
+  function voice() {
+    var vs = voices(), want = read('voice');
+    return vs.find(function (v) { return v.name === want; }) || vs[0];
+  }
+  function fill() {
+    var vs = voices(), cur = voice();
+    sel.innerHTML = '';
+    vs.forEach(function (v) {
+      var o = document.createElement('option'); o.value = v.name;
+      o.textContent = v.name.replace(/^Microsoft\s+|\s*\(.*\)$|\s*-\s*Russian.*$/g, '') + (score(v) >= 3 ? ' *' : '');
+      if (cur && v.name === cur.name) o.selected = true; sel.appendChild(o);
+    });
+    sel.hidden = vs.length < 2;
+  }
+  sel.onchange = function () { store('voice', sel.value); restart() };
+  // смена голоса или скорости: перечитать текущий абзац заново
+  function restart() { if (playing) { cur = null; synth.cancel(); setTimeout(speak, 60); } }
+  rate.value = read('rate') || '1';
+  rate.onchange = function () { store('rate', rate.value); restart() };
   function mark(i) {
     paras.forEach(function (p) { p.classList.remove('speaking'); });
     if (paras[i]) { paras[i].classList.add('speaking'); paras[i].scrollIntoView({ block: 'center', behavior: 'smooth' }); }
@@ -58,12 +85,12 @@
   function speak() {
     if (!playing || idx >= paras.length) { stop(); return; }
     var u = new SpeechSynthesisUtterance(paras[idx].textContent);
-    var v = voice(); if (v) u.voice = v; u.lang = 'ru-RU'; u.rate = 1;
-    u.onend = function () { if (playing) { idx++; speak(); } };
+    var v = voice(); if (v) u.voice = v; u.lang = 'ru-RU'; u.rate = parseFloat(rate.value) || 1;
+    cur = u; u.onend = function () { if (playing && cur === u) { idx++; speak(); } };
     mark(idx); synth.speak(u);
   }
   function stop() { playing = false; synth.cancel(); btn.textContent = 'Слушать'; btn.setAttribute('aria-pressed', 'false'); mark(-1); }
-  function show() { if (voice()) btn.hidden = false; }
+  function show() { if (voice()) { btn.hidden = false; rate.hidden = false; fill(); } }
   show(); synth.onvoiceschanged = show;
   btn.onclick = function () {
     if (playing) { stop(); return; }
