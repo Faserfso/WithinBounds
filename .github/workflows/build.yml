@@ -5,6 +5,15 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +23,25 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y pandoc
       - name: Собрать DOCX, EPUB и FB2
         run: ./build.sh
+      - name: Собрать сайт
+        run: python3 site/build_site.py
       - uses: actions/upload-artifact@v4
         with:
           name: v-predelah-dopuska
           path: build/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site/
+
+  deploy:
+    # Публикует сайт, если в Settings > Pages выбран источник "GitHub Actions".
+    # Пока Pages не включены, шаг падает без последствий для сборки.
+    needs: build
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

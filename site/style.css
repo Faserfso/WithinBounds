@@ -1,0 +1,44 @@
+:root{--bg:#f6f1e7;--fg:#1f1c18;--muted:#6f675c;--line:#ddd3c2;--accent:#b8382b;--card:#fffaf0;--fs:20px;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1a22;--fg:#e9e2d4;--muted:#93a0a6;--line:#24323c;--accent:#e0675a;--card:#14222c;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#0f1a22;--fg:#e9e2d4;--muted:#93a0a6;--line:#24323c;--accent:#e0675a;--card:#14222c;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"PT Serif",Georgia,serif;font-size:var(--fs);line-height:1.65}
+main{max-width:40rem;margin:0 auto;padding:0 16px 3rem}
+a{color:var(--accent)}
+h1,h2{font-weight:700;line-height:1.2}
+footer{max-width:40rem;margin:0 auto;padding:1.5rem 16px 3rem;color:var(--muted);font:14px "PT Sans",sans-serif;border-top:1px solid var(--line)}
+.hero{display:grid;gap:1.5rem;padding:2rem 0 1rem}
+@media (min-width:720px){main:has(.hero){max-width:56rem}.hero{grid-template-columns:240px 1fr;align-items:start;padding-top:3.5rem}}
+.cover{width:100%;max-width:240px;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.hero h1{font-size:2.2rem;margin:0 0 .25rem}
+.sub{font-style:italic;color:var(--muted);margin:0 0 1rem}
+.desc{font-size:.95em}
+.meta,.downloads{font:15px "PT Sans",sans-serif;color:var(--muted)}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font:700 16px "PT Sans",sans-serif;padding:.7rem 1.3rem;border-radius:999px}
+.toc h2{font-size:1.2rem;font-family:"PT Sans",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:2.5rem}
+.toc ol{list-style:none;padding:0;margin:0}
+.toc a{display:grid;grid-template-columns:2.2rem 1fr auto;gap:.5rem;align-items:baseline;padding:.65rem 0;border-bottom:1px solid var(--line);text-decoration:none;color:var(--fg)}
+.toc a:hover .t{color:var(--accent)}
+.toc .n{color:var(--muted);font:15px "PT Sans",sans-serif}
+.toc .s{color:var(--muted);font:13px "PT Sans",sans-serif;white-space:nowrap}
+.toc a.read .t::after{content:"  прочитано";font:12px "PT Sans",sans-serif;color:var(--muted)}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:3}
+#bar{height:100%;width:0;background:var(--accent)}
+.topbar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.6rem 0;background:var(--bg);border-bottom:1px solid var(--line);font:14px "PT Sans",sans-serif}
+.home{color:var(--muted);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;gap:.35rem;flex-shrink:0}
+.tools button{font:14px "PT Sans",sans-serif;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:.35rem .6rem;cursor:pointer}
+.tools button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
+.chapter{padding-top:2.5rem}
+.chapter .num{font:14px "PT Sans",sans-serif;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin:0}
+.chapter h1{font-size:2rem;margin:.3rem 0 .4rem}
+.stamp{font:15px "PT Sans",sans-serif;color:var(--muted);margin:0 0 2rem}
+.chapter p{margin:0;text-indent:1.4em;hyphens:auto}
+.chapter h1+p,.chapter .stamp+p{text-indent:0}
+.chapter p.speaking{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.pager{display:flex;justify-content:space-between;gap:1rem;margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font:15px "PT Sans",sans-serif}
+.pager a{text-decoration:none;max-width:48%}
+.pager a[rel=next]{text-align:right;margin-left:auto}
+.chapter .num,.chapter .stamp{text-indent:0}
+.chapter .stamp{margin:0 0 2rem}
