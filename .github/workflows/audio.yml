@@ -1,0 +1,39 @@
+name: Озвучка
+
+# Запуск вручную (Actions > Озвучка > Run workflow) или правкой audio/chapters.txt.
+on:
+  workflow_dispatch:
+    inputs:
+      chapters:
+        description: "Главы (маска файлов в ru/)"
+        default: "01-*"
+      voices:
+        description: "Голоса Silero через запятую: xenia, baya, kseniya, aidar, eugene"
+        default: "xenia,eugene"
+  push:
+    branches: [main]
+    paths: [audio/chapters.txt, audio/tts.py, .github/workflows/audio.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Установить pandoc, ffmpeg и Silero
+        run: |
+          sudo apt-get update && sudo apt-get install -y pandoc ffmpeg
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install num2words omegaconf
+      - name: Озвучить
+        run: |
+          CH="${{ github.event.inputs.chapters }}"; VO="${{ github.event.inputs.voices }}"
+          [ -z "$CH" ] && CH=$(sed -n 1p audio/chapters.txt)
+          [ -z "$VO" ] && VO=$(sed -n 2p audio/chapters.txt)
+          python3 audio/tts.py --voices "$VO" ru/$CH.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: audio
+          path: build/audio/
