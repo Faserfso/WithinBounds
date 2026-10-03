@@ -15,7 +15,7 @@ on:
     paths: [audio/chapters.txt, audio/tts.py, .github/workflows/audio.yml]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   tts:
@@ -37,3 +37,9 @@ jobs:
         with:
           name: audio
           path: build/audio/
+      - name: Сохранить MP3 в ветку audio
+        run: |
+          cd build/audio
+          git init -q -b audio && git add . 
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -qm "Озвучка ${{ github.sha }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" audio
