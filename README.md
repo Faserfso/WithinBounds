@@ -49,3 +49,7 @@
 Чтобы публикация заработала, один раз: Settings > Pages > Source: **GitHub Actions**. Адрес сайта: https://faserfso.github.io/WithinBounds/
 
 Собрать локально: `./build.sh && python3 site/build_site.py`, результат в `_site/`.
+
+## Лицензия
+
+Текст, обложка и аудио: [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ru). Можно бесплатно делиться в неизменном виде с указанием автора; продажа, переделки и переводы только с разрешения автора. Подробно в [LICENSE](LICENSE).
