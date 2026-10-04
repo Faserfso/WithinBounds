@@ -43,3 +43,6 @@ footer{max-width:40rem;margin:0 auto;padding:1.5rem 16px 3rem;color:var(--muted)
 .pager a[rel=next]{text-align:right;margin-left:auto}
 .chapter .num,.chapter .stamp{text-indent:0}
 .chapter .stamp{margin:0 0 2rem}
+.footnotes{font-size:.85em;opacity:.85;margin-top:2.5em}
+.footnotes hr{border:0;border-top:1px solid currentColor;opacity:.3;width:30%;margin-left:0}
+a.footnote-ref{text-decoration:none}
